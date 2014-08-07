@@ -1,0 +1,2 @@
+#Thu Aug 07 12:10:45 IST 2014
+constructor=recipients,notifyEveryUnstableBuild,sendToIndividuals,perModuleEmail

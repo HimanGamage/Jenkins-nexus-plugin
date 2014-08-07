@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Built-By: himangamage
+Created-By: Apache Maven
+Build-Jdk: 1.8.0_11
+Extension-Name: maven-plugin-new
+Specification-Title: This plug-in provides deep integration of Jenkins
+  and Maven. This functionality used to be part of the Jenkins core.
+   Now it is a plug-in that is installed by default, but can be disabl
+ ed.
+Implementation-Title: maven-plugin-new
+Implementation-Version: 2.7-SNAPSHOT
+Plugin-Class: hudson.maven.PluginImpl
+Group-Id: org.wso2.jenkins-ci
+Short-Name: maven-plugin-new
+Long-Name: Maven Integration plugin
+Url: http://wiki.jenkins-ci.org/display/JENKINS/Maven+Project+Plugin
+Plugin-Version: 2.7-SNAPSHOT (private-08/07/2014 12:10-himangamage)
+Hudson-Version: 1.538
+Jenkins-Version: 1.538
+Plugin-Dependencies: token-macro:1.1;resolution:=optional,mailer:1.7,j
+ avadoc:1.0
+Plugin-Developers: 
+

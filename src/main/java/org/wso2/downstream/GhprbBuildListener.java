@@ -64,43 +64,80 @@ public class GhprbBuildListener extends RunListener<AbstractBuild> {
 								+ " has no children");
 						if (build.getResult() == Result.SUCCESS) {
 							new Test().testMethod(build, listener);
+						}else{
+							LOG.log(Level.INFO, "####################### main build is not successful");
 						}
 
 					} else {
-						LOG.log(Level.INFO, "####################### build :"
-								+ build.getFullDisplayName() + " has children");
-						if (!downStreamBuilds.containsKey(build)) {
-							downStreamBuilds.put(build, downstreamBuildList);
+					
+						if(build.getResult()==Result.SUCCESS){
+							LOG.log(Level.INFO, "####################### build :"
+									+ build.getFullDisplayName() + " has children");
+							if (!downStreamBuilds.containsKey(build)) {
+								downStreamBuilds.put(build, downstreamBuildList);
 
+							}
+							if (!downStreamFinishedBuildsMap
+									.containsKey(findCause(build))) {
+								LOG.log(Level.INFO,
+										"####################### initialize the map for :"
+												+ findCause(build));
+								downStreamFinishedBuildsMap.put(findCause(build),
+										new ArrayList<AbstractBuild>());
+							}
+						}else{
+							LOG.log(Level.INFO, "####################### main build is not successful");
 						}
 
 					}
 
 				} else {
-					
-					if (!downStreamFinishedBuildsMap.containsKey(findCause(build))) {
-						LOG.log(Level.INFO, "####################### initialize the map for :"+findCause(build));
-						downStreamFinishedBuildsMap.put(findCause(build),
-								new ArrayList<AbstractBuild>());
-					}
 
 					if (build.getResult() == Result.SUCCESS) {
-						LOG.log(Level.INFO, "####################### add to the list");
-						downStreamFinishedBuildsMap.get(findCause(build)).add(
-								build);
-					}
+						LOG.log(Level.INFO,
+								"####################### add to the list");
+						List<AbstractBuild> downStreamMapList = downStreamFinishedBuildsMap
+								.get(findCause(build));
+						if (downStreamMapList != null) {
+							LOG.log(Level.INFO,
+									"####################### downstreammaplist in not equal null");
+							downStreamFinishedBuildsMap.get(findCause(build))
+									.add(build);
+							
+							List<DownstreamBuilds> buildList = downStreamBuilds
+									.get(findCause(build));
 
-					List<DownstreamBuilds> buildList = downStreamBuilds
-							.get(findCause(build));
+							if (downStreamFinishedBuildsMap.get(findCause(build))
+									.size() == buildList.size()) {
+								LOG.log(Level.INFO,
+										"####################### finished the process with "
+												+ downStreamBuilds.size() + " "
+												+ downStreamFinishedBuildsMap.size());
+								new Test().testMethod(findCause(build), listener);
+								downStreamFinishedBuildsMap.remove(findCause(build));
+								downStreamBuilds.remove(findCause(build));
+								LOG.log(Level.INFO,
+										"####################### finished the process with removing "
+												+ downStreamBuilds.size() + " "
+												+ downStreamFinishedBuildsMap.size());
+							}
+							
+							
+						}else{
+							LOG.log(Level.INFO,
+									"####################### downstreammaplist in not equal null not adding to list");
+						}
+						
+						
 
-					if (downStreamFinishedBuildsMap.get(findCause(build))
-							.size() == buildList.size()) {
-						LOG.log(Level.INFO, "####################### finished the process with "+downStreamBuilds.size()+" "+downStreamFinishedBuildsMap.size());
-						new Test().testMethod(findCause(build), listener);
+					}else{
+						LOG.log(Level.INFO,
+								"####################### build faild and removing mainbuild data");
 						downStreamFinishedBuildsMap.remove(findCause(build));
 						downStreamBuilds.remove(findCause(build));
-						LOG.log(Level.INFO, "####################### finished the process with removing "+downStreamBuilds.size()+" "+downStreamFinishedBuildsMap.size());
 					}
+
+			
 
 				}
 

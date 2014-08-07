@@ -3,6 +3,7 @@ package org.wso2.downstream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import java.util.Map.Entry;
@@ -14,11 +15,16 @@ import jenkins.mvn.GlobalSettingsProvider;
 import jenkins.mvn.SettingsProvider;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.deployer.ArtifactDeploymentException;
+import org.apache.maven.artifact.metadata.ArtifactMetadata;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
+import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
+import org.apache.maven.artifact.repository.Authentication;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.apache.maven.cli.transfer.BatchModeMavenTransferListener;
+import org.apache.maven.repository.Proxy;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 
 import hudson.FilePath;
@@ -33,7 +39,6 @@ import hudson.maven.MavenModuleSet;
 import hudson.maven.MavenModuleSetBuild;
 import hudson.maven.MavenUtil;
 import hudson.maven.RedeployPublisher;
-import hudson.maven.RedeployPublisher.WrappedArtifactRepository;
 import hudson.maven.reporters.MavenAbstractArtifactRecord;
 import hudson.maven.reporters.MavenArtifactRecord;
 import hudson.model.AbstractBuild;
@@ -326,5 +331,131 @@ public class Test {
 			return System.getProperty("user.home");
 		}
 	}
+	public static class WrappedArtifactRepository implements ArtifactRepository {
+        private ArtifactRepository artifactRepository;
+        private boolean uniqueVersion;
+        public WrappedArtifactRepository (ArtifactRepository artifactRepository, boolean uniqueVersion)
+        {
+            this.artifactRepository = artifactRepository;
+            this.uniqueVersion = uniqueVersion;
+        }
+        public String pathOf( Artifact artifact )
+        {
+            return artifactRepository.pathOf( artifact );
+        }
+        public String pathOfRemoteRepositoryMetadata( ArtifactMetadata artifactMetadata )
+        {
+            return artifactRepository.pathOfRemoteRepositoryMetadata( artifactMetadata );
+        }
+        public String pathOfLocalRepositoryMetadata( ArtifactMetadata metadata, ArtifactRepository repository )
+        {
+            return artifactRepository.pathOfLocalRepositoryMetadata( metadata, repository );
+        }
+        public String getUrl()
+        {
+            return artifactRepository.getUrl();
+        }
+        public void setUrl( String url )
+        {
+            artifactRepository.setUrl( url );
+        }
+        public String getBasedir()
+        {
+            return artifactRepository.getBasedir();
+        }
+        public String getProtocol()
+        {
+            return artifactRepository.getProtocol();
+        }
+        public String getId()
+        {
+            return artifactRepository.getId();
+        }
+        public void setId( String id )
+        {
+            artifactRepository.setId( id );
+        }
+        public ArtifactRepositoryPolicy getSnapshots()
+        {
+            return artifactRepository.getSnapshots();
+        }
+        public void setSnapshotUpdatePolicy( ArtifactRepositoryPolicy policy )
+        {
+            artifactRepository.setSnapshotUpdatePolicy( policy );
+        }
+        public ArtifactRepositoryPolicy getReleases()
+        {
+            return artifactRepository.getReleases();
+        }
+        public void setReleaseUpdatePolicy( ArtifactRepositoryPolicy policy )
+        {
+            artifactRepository.setReleaseUpdatePolicy( policy );
+        }
+        public ArtifactRepositoryLayout getLayout()
+        {
+            return artifactRepository.getLayout();
+        }
+        public void setLayout( ArtifactRepositoryLayout layout )
+        {
+            artifactRepository.setLayout( layout );
+        }
+        public String getKey()
+        {
+            return artifactRepository.getKey();
+        }
+        public boolean isUniqueVersion()
+        {
+            return this.uniqueVersion;
+        }
+        
+        public void setUniqueVersion(boolean uniqueVersion) {
+            this.uniqueVersion = uniqueVersion;
+        }
+        
+        public boolean isBlacklisted()
+        {
+            return artifactRepository.isBlacklisted();
+        }
+        public void setBlacklisted( boolean blackListed )
+        {
+            artifactRepository.setBlacklisted( blackListed );
+        }
+        public Artifact find( Artifact artifact )
+        {
+            return artifactRepository.find( artifact );
+        }
+        public List<String> findVersions( Artifact artifact )
+        {
+            return artifactRepository.findVersions( artifact );
+        }
+        public boolean isProjectAware()
+        {
+            return artifactRepository.isProjectAware();
+        }
+        public void setAuthentication( Authentication authentication )
+        {
+            artifactRepository.setAuthentication( authentication );
+        }
+        public Authentication getAuthentication()
+        {
+            return artifactRepository.getAuthentication();
+        }
+        public void setProxy( Proxy proxy )
+        {
+            artifactRepository.setProxy( proxy );
+        }
+        public Proxy getProxy()
+        {
+            return artifactRepository.getProxy();
+        }
+        public List<ArtifactRepository> getMirroredRepositories()
+        {
+            return Collections.emptyList();
+        }
+        public void setMirroredRepositories( List<ArtifactRepository> arg0 )
+        {
+            // noop            
+        }
+    } 
 
 }

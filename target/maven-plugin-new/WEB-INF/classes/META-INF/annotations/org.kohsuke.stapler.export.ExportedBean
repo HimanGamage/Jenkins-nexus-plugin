@@ -1,0 +1,13 @@
+hudson.maven.AbstractMavenBuild
+hudson.maven.AbstractMavenProject
+hudson.maven.FilteredChangeLogSet
+hudson.maven.MavenBuild
+hudson.maven.MavenModule
+hudson.maven.MavenModuleSet
+hudson.maven.MavenModuleSetBuild
+hudson.maven.reporters.MavenAbstractArtifactRecord$Record
+hudson.maven.reporters.MavenAggregatedArtifactRecord
+hudson.maven.reporters.MavenArtifact
+hudson.maven.reporters.MavenArtifactRecord
+hudson.maven.reporters.SurefireAggregatedReport
+hudson.maven.reporters.SurefireReport
